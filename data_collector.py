@@ -5,6 +5,9 @@ import aiohttp
 import aiofiles
 import nest_asyncio
 import os
+import shutil
+from pathlib import Path
+
 nest_asyncio.apply()
 
 loop = asyncio.get_event_loop()
@@ -69,15 +72,26 @@ async def fetch_all_html():
                 for book_n, url in enumerate(urls):
                     futures.append(fetch_html(session, page_number, book_n, url))
                 await asyncio.gather(*futures)
+                
+            
+def rm_fails():
+    rootdir = './books'
+    for subdir, dirs, files in os.walk(rootdir):
+        for file in files:
+            file_path = os.path.join(subdir, file)
+            if Path(file_path).stat().st_size < 5000:
+                os.remove(file_path)
 
 
-def download_books(bests=False, links=False, books=False):
+def download_books(bests=False, links=False, books=False, fails=False):
     if bests:
         loop.run_until_complete(fetch_all_best())
     if links:
         extract_links()
     if books:
         loop.run_until_complete(fetch_all_html())
-        
+    if fails:
+        rm_fails()
+                
 
-download_books(books=True)
+download_books()
