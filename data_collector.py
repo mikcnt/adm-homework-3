@@ -46,15 +46,13 @@ def extract_links():
 def books_folder(page_number):
     return 'books/page_{}'.format(page_number)
 
-def book_path(page_number, url):
-    name = url.split('/')[-1].rstrip()
-    return '{}/{}.html'.format(books_folder(page_number), name)
+def book_name(page_number, book_n):
+    return '{}/{}.html'.format(books_folder(page_number), (page_number - 1) * 100 + book_n + 1)
 
-async def fetch_html(session: aiohttp.ClientSession, page_number, url):
-    path = book_path(page_number, url)
+async def fetch_html(session: aiohttp.ClientSession, page_number, book_n, url):
+    path = book_name(page_number, book_n)
     if (os.path.exists(path)):
         return
-    print('ao')
     response = await session.get(url)
     data = await response.read()
     async with aiofiles.open(path, "wb") as f:
@@ -66,8 +64,10 @@ async def fetch_all_html():
             for page_number in range(1, 301):
                 print('Page number', page_number)
                 os.makedirs(books_folder(page_number), exist_ok=True)
-                urls = [txt.readline() for _ in range (100)]
-                futures = [fetch_html(session, page_number, url) for url in urls]
+                urls = [txt.readline() for _ in range(100)]
+                futures = []
+                for book_n, url in enumerate(urls):
+                    futures.append(fetch_html(session, page_number, book_n, url))
                 await asyncio.gather(*futures)
 
 
@@ -80,4 +80,4 @@ def download_books(bests=False, links=False, books=False):
         loop.run_until_complete(fetch_all_html())
         
 
-download_books()
+download_books(books=True)
