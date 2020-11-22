@@ -89,8 +89,8 @@ def html_parser(book_path, url):
 header = [
     'bookTitle', 'bookSeries', 'bookAuthors',
     'ratingValue', 'ratingCount', 'reviewCount',
-    'plot', 'numberOfPages', 'PublishingDate',
-    'Characters', 'Setting', 'url'
+    'Plot', 'numberOfPages', 'PublishingDate',
+    'Characters', 'Setting', 'Url'
     ]
 
 with open('parsed_books.tsv', 'w') as out_file:
