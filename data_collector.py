@@ -92,6 +92,3 @@ def download_books(bests=False, links=False, books=False, fails=False):
         loop.run_until_complete(fetch_all_html())
     if fails:
         rm_fails()
-                
-
-download_books()

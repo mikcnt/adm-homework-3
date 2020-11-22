@@ -85,23 +85,24 @@ def html_parser(book_path, url):
     return ttr
 
 
+def create_tsv(create=False):
+    if create:
+        header = [
+            'bookTitle', 'bookSeries', 'bookAuthors',
+            'ratingValue', 'ratingCount', 'reviewCount',
+            'Plot', 'numberOfPages', 'PublishingDate',
+            'Characters', 'Setting', 'Url'
+            ]
 
-header = [
-    'bookTitle', 'bookSeries', 'bookAuthors',
-    'ratingValue', 'ratingCount', 'reviewCount',
-    'Plot', 'numberOfPages', 'PublishingDate',
-    'Characters', 'Setting', 'Url'
-    ]
-
-with open('parsed_books.tsv', 'w') as out_file:
-    tsv_writer = csv.writer(out_file, delimiter='\t')
-    tsv_writer.writerow(header)
-    with open('book_links.txt', 'r') as txt:
-        for i, url in enumerate(txt):
-            book_n = i + 1
-            print('Book number:', book_n)
-            page_n = (book_n - 1) // 100 + 1
-            path = 'books/page_{}/{}.html'.format(page_n, book_n)
-            row = html_parser(path, url)
-            if row:
-                tsv_writer.writerow(row)
+        with open('parsed_books.tsv', 'w') as out_file:
+            tsv_writer = csv.writer(out_file, delimiter='\t')
+            tsv_writer.writerow(header)
+            with open('book_links.txt', 'r') as txt:
+                for i, url in enumerate(txt):
+                    book_n = i + 1
+                    print('Book number:', book_n)
+                    page_n = (book_n - 1) // 100 + 1
+                    path = 'books/page_{}/{}.html'.format(page_n, book_n)
+                    row = html_parser(path, url)
+                    if row:
+                        tsv_writer.writerow(row)
