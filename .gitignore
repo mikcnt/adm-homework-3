@@ -2,3 +2,4 @@ books
 best_books_pages
 .virtual_documents
 .ipynb_checkpoints
+__pycache__
