@@ -76,14 +76,26 @@ async def fetch_all_html():
             
 def rm_fails():
     rootdir = './books'
-    for subdir, dirs, files in os.walk(rootdir):
+    for subdir, _, files in os.walk(rootdir):
         for file in files:
             file_path = os.path.join(subdir, file)
             if Path(file_path).stat().st_size < 5000:
                 os.remove(file_path)
 
+def create_dirs():
+    main_path = './books'
+    best_book_path = './best_books_pages/'
+    Path(main_path).mkdir(parents=True, exist_ok=True)
+    Path(best_book_path).mkdir(parents=True, exist_ok=True)
 
-def download_books(bests=False, links=False, books=False, fails=False):
+    for i in range(1, 301):
+        page_path = main_path + '/page_{}'.format(i)
+        Path(page_path).mkdir(parents=True, exist_ok=True)
+
+
+def download_books(dirs=False, bests=False, links=False, books=False, fails=False):
+    if dirs:
+        create_dirs()
     if bests:
         loop.run_until_complete(fetch_all_best())
     if links:
