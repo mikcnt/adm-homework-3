@@ -14,6 +14,7 @@ import numpy as np
 import heapq
 import re
 import functions
+import matplotlib.pyplot as plt 
 
 
 # Utils
@@ -138,6 +139,7 @@ class SimpleSearchEngine:
     def search(self, query):
         # Since we performed stemming on the plot column of the dataframe, we need to
         # perform stemming also on the query. Otherwise, our results wouldn't be accurate
+        query = query.lower()
         ps = PorterStemmer()
         query_tokens = set([ps.stem(w) for w in word_tokenize(query)])
 
@@ -224,6 +226,7 @@ class RankedSearchEngine:
         
     def execute_query(self, query, k=10):
         # First stem the query
+        query = query.lower()
         ps = PorterStemmer()
         query_tokens = set([ps.stem(w) for w in word_tokenize(query)])
         
@@ -252,3 +255,79 @@ class RankedSearchEngine:
         max_k_df = pd.DataFrame(data=max_k, columns=['bookTitle', 'Plot', 'Url', 'Similarity'])
 
         return max_k_df
+    
+# Exercise 4
+
+def cumpage_serie(df):
+    vis = df[df['bookSeries'].notnull()]
+    vis = vis[vis['bookSeries'].str.contains('#')]
+    vis = vis[~vis['bookSeries'].str.contains(r'#\d[-–]')]
+
+    def remove_hashtag(s):
+        return re.sub(r'\s#\d', '', s)
+
+    vis['bookSeries'] = vis['bookSeries'].apply(remove_hashtag)
+
+    book_series = vis.drop_duplicates(['bookSeries']).head(10)['bookSeries'].to_list()
+
+    vis = vis[vis['bookSeries'].isin(book_series)]
+
+    def find_year(s):
+        return re.findall(r'[0-9][0-9][0-9][0-9]', s)[0]
+
+    vis['PublishingDate'] = vis['PublishingDate'].apply(find_year).astype(int)
+
+    vis = vis.groupby(['PublishingDate', 'bookSeries']).sum()['numberOfPages'].astype(int)
+    vis = vis.unstack()
+
+    fig = plt.figure(figsize=(20, 6))
+    ax = fig.add_subplot(111)
+
+    ax.set_ylim(0, 1500)
+
+    plt.xticks(vis.index)
+
+    for year in vis.index:
+        plt.vlines(year, 0, vis.max(axis=1)[year], color='silver', linestyles='dashed', zorder=1, label='_nolegend_')
+
+    for col in vis.columns:
+        ax.scatter(vis.index, vis.unstack()[col])
+
+    ax.legend(vis.columns, loc='upper center', bbox_to_anchor=(0.5, 1.19), ncol=3, fancybox=True, shadow=True)
+
+    plt.setp(ax, xlabel='Year of publication', ylabel='Cumulative number of pages per book series')
+
+    plt.show()
+    
+    return vis
+
+def year_pages_visualization(series_pages):
+    series = []
+    for col in series_pages.columns:
+        series.append(series_pages[series_pages[col].notna()][col].copy())
+
+    for serie_n in range(len(series)):
+        indexes = [i for i in range(min(series[serie_n].index), max(series[serie_n].index)) if i not in series[serie_n].index]
+
+        for idx in indexes:
+            series[serie_n].loc[idx] = 0
+
+        series[serie_n] = series[serie_n].sort_index().reset_index(drop=True)
+        series[serie_n] = series[serie_n].cumsum()
+
+    fig = plt.figure(figsize=(20, 6))
+    ax = fig.add_subplot(111)
+
+    ax.set_ylim(0, 5000)
+
+    plt.xticks(np.arange(max([len(serie) for serie in series])))
+
+    for serie in series:
+        ax.plot(serie.index, serie, marker='o')
+
+
+    ax.legend(series_pages.columns, loc='upper center', bbox_to_anchor=(0.5, 1.19), ncol=3, fancybox=True, shadow=True)
+
+    plt.setp(ax, xlabel='Years since publication of first book of the serie', ylabel='Cumulative series page count')
+
+    plt.show()
