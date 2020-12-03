@@ -1,6 +1,8 @@
 # Homework 3 - Which book would you recomend?
 
-![Logo](./images/logo.png)
+<p align="center">
+  <img src="./images/logo.png" alt="Sublime's custom image"/>
+</p>
 
 # Task
 The goal of this project was to experiment with crawling, parsing and to get confidence with different techniques regarding search engines, like how to retrieve results for a conjunctive query, how to score results with cosin similarity and tfidf, and so on so forth. Finally, it was asked to write both a recursive and a dynamic programming algorithm for the problem of longest increasing subsequence of a string.
