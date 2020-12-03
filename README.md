@@ -9,12 +9,15 @@ The goal of this project was to experiment with crawling, parsing and to get con
 
 We also decided to produce an original logo for our search engine! It does remind me of something, not sure what though...
 
+> **Pronunciation**: goo·gs
+
+
 # Usage
 In the repository, it is included `requirements.txt`, which consists in a file containing the list of items to be installed using conda, like so:
 
 `conda install --file requirements.txt`
 
-Once the requirements are installed, you shoudln't have any problem when executing the scripts. Consider also creating a new environment, so that you don't have to worry about what is really needed and what not after you're done with this project. With conda, that's easily done with the following command:
+Once the requirements are installed, you shouldn't have any problem when executing the scripts. Consider also creating a new environment, so that you don't have to worry about what is really needed and what not after you're done with this project. With conda, that's easily done with the following command:
 
 `conda create --name <env> --file requirements.txt`
 
