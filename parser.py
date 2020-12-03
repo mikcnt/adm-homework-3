@@ -94,7 +94,7 @@ def create_tsv(create=False):
             'Characters', 'Setting', 'Url'
             ]
 
-        with open('parsed_books.tsv', 'w') as out_file:
+        with open('./data/parsed_books.tsv', 'w') as out_file:
             tsv_writer = csv.writer(out_file, delimiter='\t')
             tsv_writer.writerow(header)
             with open('book_links.txt', 'r') as txt:
