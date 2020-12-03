@@ -208,10 +208,10 @@ def tfidf_inv_indexes(documents, term_indexes, inv_indexes):
 ## Vanilla search engine
 
 class SimpleSearchEngine:
-    """A class representing a naive search engine, meaning that it will not perform any kind of sorting of the results.
+    """Class representing a naive search engine, meaning that it will not perform any kind of sorting of the results.
     
     Attributes:
-        df (pd.DataFrame): Dataframe containingt the data on which the search engine is going to work.
+        df (pd.DataFrame): Dataframe containing the data on which the search engine is going to work.
         term_indexes (dict): Dictionary containing the vocabulary with which the search engine is going to use to represent queries.
         inv_indexes (dict): Dictionary containing the information with which the search engine is going to retrieve books on which the query appears.
     
@@ -344,10 +344,10 @@ class ByTitleMatch(RankCalculator):
 ## Ranked search engine
 
 class RankedSearchEngine:
-    """A class representing a naive search engine, meaning that it will not perform any kind of sorting of the results.
+    """Class representing a sophisticated search engine, which first executes a conjunctive query and then sorts the value according to a scoring function.
     
     Attributes:
-        df (pd.DataFrame): Dataframe containingt the data on which the search engine is going to work.
+        df (pd.DataFrame): Dataframe containing the data on which the search engine is going to work.
         term_indexes (dict): Dictionary containing the vocabulary with which the search engine is going to use to represent queries.
         inv_indexes (dict): Dictionary containing the information with which the search engine is going to retrieve books on which the query appears.
         simple_SE (class): Vanilla search engine, used to retrieve the results of the conjunctive query.
