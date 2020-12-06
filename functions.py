@@ -14,7 +14,9 @@ import numpy as np
 import heapq
 import re
 import functions
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+nltk.download('stopwords')
+nltk.download('punkt')
 
 
 # Utils
